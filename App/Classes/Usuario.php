@@ -30,7 +30,7 @@ class Usuario{
 
 }
 
-
+// conectar banco
 $user = new Usuario;
 
 //Pegando os dados do forms
