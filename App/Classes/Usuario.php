@@ -1,8 +1,9 @@
 <?php
 
-require '../DB/Database.php';
+require './App/DB/Database.php';
 
 class Usuario{
+    public int $id_usuario;
     public string $nome;
     public string $email;
     public string $cpf;
@@ -12,7 +13,7 @@ class Usuario{
     public function cadastrar(){
         $db = new Database('usuario');
 
-        $db->insert(
+        $res = $db->insert(
                 [
                     'nome'=> $this->nome,
                     'email'=> $this->email,
@@ -21,38 +22,43 @@ class Usuario{
                     'id_perfil'=> $this->id_perfil,
                 ]
             );
-        return true;
+        return $res;
     }
 
-    public function buscar(){
-        return (new Database('usuario'))->select()->fetchAll(PDO::FETCH_CLASS,self::class);
+    public function buscar($where=null, $order=null, $limit=null){
+        $db = new Database('usuario');
+
+        $res = $db->select($where, $order, $limit)->fetchAll(PDO::FETCH_CLASS,self::class);
+        return $res;
     }
 
-}
+    public function buscar_por_id($id){
+        $db = new Database('usuario');
 
-// conectar banco
-$user = new Usuario;
+        $obj = $db->select('id_usuario ='.$id)->fetchObject(self::class);
+        return $obj; //retorna um obj da classe usuario
+    }
 
-//Pegando os dados do forms
+    public function atualizar(){
+        $db = new Database('usuario');
 
-$user->nome = "Teste";
-$user->cpf = "00000000004";
-$user->email = "teste@email.com";
-$user->senha = "123456";
-$user->id_perfil = 1;
+        $res = $db->update("id_usuario =".$this->id_usuario,
+                            [
+                                "nome" => $this->nome,
+                                "cpf" => $this->cpf,
+                                "email" => $this->email,
+                                "senha" => $this->senha,
+                                "id_perfil" => $this->id_perfil,
+                            ]
+                        );
 
-print_r($user);
+        return $res;
+    }
 
-// $res = $user->cadastrar();
-// echo $res;
+    public function excluir(){
+        $db = new Database('usuario');
 
-$usuarios = $user->buscar();
-
-echo '<pre>';
-print_r($usuarios);
-echo '</pre>';
-
-foreach($usuarios as $usuario){
-    echo '<br>';
-    echo $usuario->nome ;
+        $res = $db->delete('id_usuario ='.$this->id_usuario);
+        return $res;
+    }
 }

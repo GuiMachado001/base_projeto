@@ -91,13 +91,18 @@ Class Database{
     }
 
     public function update($where, $array){
+
+        echo $where;
+        echo "<br>";
+        print_r($array);
+
         //Extraindo as chaves, coluna
-        $fields = array_key($array);
+        $fields = array_keys($array);
         $values = array_values($array);
         //Montar Query
-        $query = 'UPDATE '.$this->table.' SET '.implode('=?,',$fields). '=?'. '=? WHERE '. $where;
+        $query = 'UPDATE '.$this->table.' SET '.implode('=?,',$fields). '=? WHERE '. $where;
 
         $res = $this->execute($query, $values);
-        return $res;
+        return $res->rowCount();
     }
 }
