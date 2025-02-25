@@ -51,6 +51,7 @@ class Usuario{
                                 "email" => $this->email,
                                 "senha" => $this->senha,
                                 "id_perfil" => $this->id_perfil,
+                                "foto" => $this->foto,
                             ]
                         );
 

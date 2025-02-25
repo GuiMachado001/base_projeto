@@ -1,33 +1,12 @@
 <?php
   require './App/Classes/Usuario.php';
 
-  // $objUser = new Usuario();
 
-  if(isset($_POST['cadastrar'])){
+  $objUser = new Usuario();
 
-    $nome = $_POST['nome'];
-    $cpf = $_POST['cpf'];
-    $senha = $_POST['senha'];
-    $email = $_POST['email'];
-    $perfil = $_POST['perfil'];
+  $dados = $objUser->buscar();
 
-
-    $objUser = new Usuario();
-
-    $objUser->nome = $nome;
-    $objUser->cpf = $cpf;
-    $objUser->senha = password_hash($senha, PASSWORD_DEFAULT);
-    $objUser->email = $email;
-    $objUser->id_perfil = $perfil;
-
-    $res = $objUser->cadastrar();
-
-    if($res){
-      echo "<script>alert('Cadastrado com Sucesso') </script>";
-    }else{
-      echo "<script>alert('Erro ao Cadastrar') </script>";
-    }
-  }
+  // print_r($dados);
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +18,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
-</head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-primary">
         <div class="container-fluid">
@@ -53,7 +34,7 @@
                 <a class="nav-link active" aria-current="page" href="index.php">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="#">Listar</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -86,34 +67,38 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
+              <th scope="col">ID</th>
+              <th scope="col">Foto</th>
+              <th scope="col">Nome</th>
+              <th scope="col">CPF</th>
+              <th scope="col">E-mail</th>
+              <th scope="col">Id Perfil</th>
+              <th scope="col">Editar</th>
+              <th scope="col">Excluir</th>
             </tr>
           </thead>
 
-        <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
+          <tbody>
+            <?php
+              foreach($dados as $usuario){
+                echo '
+                <tr>
+                  <th scope="row">'.$usuario->id_usuario.'</th>
+                  <td ><img src='.$usuario->foto.' style="width: 100px;"></td>
+                  <td>'.$usuario->nome.'</td>
+                  <td>'.$usuario->cpf.'</td>
+                  <td>'.$usuario->email.'</td>
+                  <td>'.$usuario->id_perfil.'</td>
+                  <td><a class="btn btn-primary" href="./editar_usuario.php?id_user='.$usuario->id_usuario.'"><i class="bi bi-pencil-square"></i></a></td>
+                  <td><a class="btn btn-danger" href="./excluir_usuario.php?id_user='.$usuario->id_usuario.'" ><i class="bi bi-trash3"></i></a></td>
 
-    </table>
+                </tr>
+                ';
+              }
+            ?>
+
+          </tbody>
+        </table>
     </div>
 
 </body>

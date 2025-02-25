@@ -1,9 +1,18 @@
 <?php
-  require './App/Classes/Usuario.php';
 
-  // $objUser = new Usuario();
+require './App/Classes/Usuario.php';
 
-  if(isset($_POST['cadastrar'])){
+if(isset($_GET['id_user'])){
+
+  $id = $_GET['id_user'];
+
+  $objUser = new Usuario;
+
+  $user_edit = $objUser->buscar_por_id($id);
+
+
+  // ---atualiza
+  if(isset($_POST['editar'])){
 
     $nome = $_POST['nome'];
     $cpf = $_POST['cpf'];
@@ -24,34 +33,28 @@
     $path = $pasta . $novo_nome . '.'. $extensao;
     $foto = move_uploaded_file($arquivo['tmp_name'], $path);
 
-    // echo "MOVED: ".$foto;
-
-      // ----------validar tamanho do arquivo
-    // $tamanho = $arquivo['size'];
-    // if($tamanho > 500){
-    //   echo "Tamanho inválido";
-    // }
-
-    // -----------
 
 
-    $objUser = new Usuario();
 
-    $objUser->nome = $nome;
-    $objUser->cpf = $cpf;
-    $objUser->senha = password_hash($senha, PASSWORD_DEFAULT);
-    $objUser->email = $email;
-    $objUser->foto = $path;
-    $objUser->id_perfil = $perfil;
+    $user_edit->nome = $nome;
+    $user_edit->cpf = $cpf;
+    $user_edit->senha = password_hash($senha, PASSWORD_DEFAULT);
+    $user_edit->email = $email;
+    $user_edit->foto = $path;
+    $user_edit->id_perfil = $perfil;
 
-    $res = $objUser->cadastrar();
+    $res = $user_edit->atualizar();
 
     if($res){
-      echo "<script>alert('Cadastrado com Sucesso') </script>";
+      echo "<script>alert('Editado com Sucesso') </script>";
+      header('location: ./listar.php');
     }else{
       echo "<script>alert('Erro ao Cadastrar') </script>";
     }
   }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +106,7 @@
         <h1>SysCad</h1>
     </div>
     <div class="container">
-        <h1 class="mt-4 text-center">Cadastro de Usuario</h1>
+        <h1 class="mt-4 text-center">Editar Usuario</h1>
     </div>
     
     <div class="container">
@@ -111,7 +114,7 @@
 
             <div class="mb-3">
               <label for="nome" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nome">
+              <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $user_edit->nome;?>">
             </div>
 
             <div class="mb-3">
@@ -121,25 +124,25 @@
 
             <div class="mb-3">
                 <label for="email" class="form-label">email</label>
-                <input type="email" class="form-control" id="email" name="email">
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo $user_edit->email;?>">
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
 
               
             <div class="mb-3">
                 <label for="cpf" class="form-label">cpf</label>
-                <input type="cpf" class="form-control" id="cpf" name="cpf">
+                <input type="cpf" class="form-control" id="cpf" name="cpf" value="<?php echo $user_edit->cpf;?>">
             </div>
 
               
             <div class="mb-3">
                 <label for="senha" class="form-label">senha</label>
-                <input type="password" class="form-control" id="senha" name="senha">
+                <input type="password" class="form-control" id="senha" name="senha" value="<?php echo $user_edit->senha;?>">
             </div>
 
             <div class="mb-3">
               <select class="form-select" name="perfil" aria-label="Default select example">
-                <option selected>Selecione o ID</option>
+                <option selected><?php echo $user_edit->id_perfil;?></option>
                 <option value="1">ADM</option>
                 <option value="2">Supervisor</option>
                 <option value="3">Usuario</option>
@@ -148,7 +151,7 @@
                 
 
             <button type="reset" class="btn btn-danger">Cancelar</button>
-            <button type="submit" name="cadastrar" class="btn btn-primary">Cadastrar</button>
+            <button type="submit" name="editar" class="btn btn-primary">Salvar</button>
 
           </form>
     </div>
