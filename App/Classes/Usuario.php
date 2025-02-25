@@ -9,7 +9,8 @@ class Usuario{
     public string $cpf;
     public string $senha;
     public int $id_perfil;
-
+    public string $foto;
+    
     public function cadastrar(){
         $db = new Database('usuario');
 
@@ -20,6 +21,7 @@ class Usuario{
                     'cpf'=> $this->cpf,
                     'senha'=> $this->senha,
                     'id_perfil'=> $this->id_perfil,
+                    'foto'=>$this->foto,
                 ]
             );
         return $res;

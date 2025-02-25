@@ -12,12 +12,37 @@
     $perfil = $_POST['perfil'];
 
 
+    // ----------- manipulando arquivos com php
+    // print_r($_FILES);
+    $arquivo = $_FILES['foto'];
+    if($arquivo['error']) die ("Falha ao enviar a foto");
+
+    $pasta = './uploads/fotos/';
+    $nome_foto = $arquivo['name'];
+    $novo_nome = uniqid();
+    $extensao = strtolower(pathinfo($nome_foto, PATHINFO_EXTENSION));
+    if($extensao != 'png' && $extensao != 'jpg' && $extensao != 'jpeg') die ("Arquivo Inválido!");
+    $path = $pasta . $novo_nome . '.'. $extensao;
+    $foto = move_uploaded_file($arquivo['tmp_name'], $path);
+
+    // echo "MOVED: ".$foto;
+
+      // ----------validar tamanho do arquivo
+    // $tamanho = $arquivo['size'];
+    // if($tamanho > 500){
+    //   echo "Tamanho inválido";
+    // }
+
+        // -----------
+
+
     $objUser = new Usuario();
 
     $objUser->nome = $nome;
     $objUser->cpf = $cpf;
     $objUser->senha = password_hash($senha, PASSWORD_DEFAULT);
     $objUser->email = $email;
+    $objUser->foto = $path;
     $objUser->id_perfil = $perfil;
 
     $res = $objUser->cadastrar();
@@ -50,10 +75,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="index.php">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="listar.php">Listar</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,41 +108,44 @@
     </div>
     
     <div class="container">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
               <label for="nome" class="form-label">Nome</label>
               <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nome">
-              
+            </div>
+
+            <div class="mb-3">
+              <label for="foto" class="form-label">Foto</label>
+              <input type="file" class="form-control" id="foto" name="foto">
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">email</label>
                 <input type="email" class="form-control" id="email" name="email">
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-              </div>
+            </div>
 
               
             <div class="mb-3">
                 <label for="cpf" class="form-label">cpf</label>
                 <input type="cpf" class="form-control" id="cpf" name="cpf">
-              </div>
+            </div>
 
               
             <div class="mb-3">
                 <label for="senha" class="form-label">senha</label>
                 <input type="password" class="form-control" id="senha" name="senha">
-              </div>
+            </div>
 
-              <div class="mb-3">
-
-                <select class="form-select" name="perfil" aria-label="Default select example">
-                  <option selected>Selecione o ID</option>
-                  <option value="1">ADM</option>
-                  <option value="2">Supervisor</option>
-                  <option value="3">Usuario</option>
-                </select>
-              </div>
+            <div class="mb-3">
+              <select class="form-select" name="perfil" aria-label="Default select example">
+                <option selected>Selecione o ID</option>
+                <option value="1">ADM</option>
+                <option value="2">Supervisor</option>
+                <option value="3">Usuario</option>
+              </select>
+            </div>
                 
 
             <button type="reset" class="btn btn-danger">Cancelar</button>
