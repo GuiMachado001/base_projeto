@@ -1,31 +1,21 @@
 <?php
+  require './App/Classes/Produto.php';
 
-require './App/Classes/Usuario.php';
+  // $objUser = new Usuario();
 
-if(isset($_GET['id_user'])){
-
-  $id = $_GET['id_user'];
-
-  $objUser = new Usuario;
-
-  $user_edit = $objUser->buscar_por_id($id);
-
-
-  // ---atualiza
-  if(isset($_POST['editar'])){
+  if(isset($_POST['cadastrar'])){
 
     $nome = $_POST['nome'];
-    $cpf = $_POST['cpf'];
-    $senha = $_POST['senha'];
-    $email = $_POST['email'];
-    $perfil = $_POST['perfil'];
+    $descricao = $_POST['descricao'];
+    $preco = $_POST['preco'];
+
 
 
     // ----------- manipulando arquivos com php
     // print_r($_FILES);
     $arquivo = $_FILES['foto'];
     if($arquivo['error']) die ("Falha ao enviar a foto");
-    $pasta = './uploads/fotos/';
+    $pasta = './uploads/fotos_produtos/';
     $nome_foto = $arquivo['name'];
     $novo_nome = uniqid();
     $extensao = strtolower(pathinfo($nome_foto, PATHINFO_EXTENSION));
@@ -33,28 +23,31 @@ if(isset($_GET['id_user'])){
     $path = $pasta . $novo_nome . '.'. $extensao;
     $foto = move_uploaded_file($arquivo['tmp_name'], $path);
 
+    // echo "MOVED: ".$foto;
+
+      // ----------validar tamanho do arquivo
+    // $tamanho = $arquivo['size'];
+    // if($tamanho > 500){
+    //   echo "Tamanho inválido";
+    // }
+
+    // -----------
 
 
+    $objUser = new Produto();
 
-    $user_edit->nome = $nome;
-    $user_edit->cpf = $cpf;
-    $user_edit->senha = password_hash($senha, PASSWORD_DEFAULT);
-    $user_edit->email = $email;
-    $user_edit->foto = $path;
-    $user_edit->id_perfil = $perfil;
-
-    $res = $user_edit->atualizar();
+    $objUser->nome = $nome;
+    $objUser->descricao = $descricao;
+    $objUser->preco = $preco;
+    $objUser->foto = $path; 
+    $res = $objUser->cadastrar();
 
     if($res){
-      echo "<script>alert('Editado com Sucesso') </script>";
-      header('location: ./listar.php');
+      echo "<script>alert('Cadastrado com Sucesso') </script>";
     }else{
       echo "<script>alert('Erro ao Cadastrar') </script>";
     }
   }
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -98,15 +91,15 @@ if(isset($_GET['id_user'])){
         <h1>SysCad</h1>
     </div>
     <div class="container">
-        <h1 class="mt-4 text-center">Editar Usuario</h1>
+        <h1 class="mt-4 text-center">Cadastro de Produto</h1>
     </div>
     
     <div class="container">
         <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-              <label for="nome" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $user_edit->nome;?>">
+              <label for="nome" class="form-label">Nome Produto</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nome">
             </div>
 
             <div class="mb-3">
@@ -115,35 +108,20 @@ if(isset($_GET['id_user'])){
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">email</label>
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo $user_edit->email;?>">
+                <label for="descricao" class="form-label">descricao</label>
+                <input type="text" class="form-control" id="descricao" name="descricao">
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
 
               
             <div class="mb-3">
-                <label for="cpf" class="form-label">cpf</label>
-                <input type="cpf" class="form-control" id="cpf" name="cpf" value="<?php echo $user_edit->cpf;?>">
+                <label for="preco" class="form-label">preco</label>
+                <input type="number" class="form-control" id="preco" name="preco">
             </div>
 
-              
-            <div class="mb-3">
-                <label for="senha" class="form-label">senha</label>
-                <input type="password" class="form-control" id="senha" name="senha" value="<?php echo $user_edit->senha;?>">
-            </div>
-
-            <div class="mb-3">
-              <select class="form-select" name="perfil" aria-label="Default select example">
-                <option selected><?php echo $user_edit->id_perfil;?></option>
-                <option value="1">ADM</option>
-                <option value="2">Supervisor</option>
-                <option value="3">Usuario</option>
-              </select>
-            </div>
-                
 
             <button type="reset" class="btn btn-danger">Cancelar</button>
-            <button type="submit" name="editar" class="btn btn-primary">Salvar</button>
+            <button type="submit" name="cadastrar" class="btn btn-primary">Cadastrar</button>
 
           </form>
     </div>

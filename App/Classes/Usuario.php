@@ -21,7 +21,7 @@ class Usuario{
                     'cpf'=> $this->cpf,
                     'senha'=> $this->senha,
                     'id_perfil'=> $this->id_perfil,
-                    'foto'=>$this->foto,
+                    "foto" => $this->foto,
                 ]
             );
         return $res;

@@ -1,8 +1,8 @@
 <?php
-  require './App/Classes/Usuario.php';
+  require './App/Classes/Produto.php';
 
 
-  $objUser = new Usuario();
+  $objUser = new Produto();
 
   $dados = $objUser->buscar();
 
@@ -52,7 +52,7 @@
         <h1>SysCad</h1>
     </div>
     <div class="container">
-        <h1 class="mt-4 text-center">Listar Usuario </h1>
+        <h1 class="mt-4 text-center">Listar Produto </h1>
     </div>
     
     <div class="container">
@@ -62,27 +62,22 @@
               <th scope="col">ID</th>
               <th scope="col">Foto</th>
               <th scope="col">Nome</th>
-              <th scope="col">CPF</th>
-              <th scope="col">E-mail</th>
-              <th scope="col">Id Perfil</th>
-              <th scope="col">Editar</th>
-              <th scope="col">Excluir</th>
+              <th scope="col">Descricao</th>
+              <th scope="col">Preco</th>
             </tr>
           </thead>
 
           <tbody>
             <?php
-              foreach($dados as $usuario){
+              foreach($dados as $produto){
                 echo '
                 <tr>
-                  <th scope="row">'.$usuario->id_usuario.'</th>
-                  <td ><img src='.$usuario->foto.' style="width: 100px;"></td>
-                  <td>'.$usuario->nome.'</td>
-                  <td>'.$usuario->cpf.'</td>
-                  <td>'.$usuario->email.'</td>
-                  <td>'.$usuario->id_perfil.'</td>
-                  <td><a class="btn btn-primary" href="./editar_usuario.php?id_user='.$usuario->id_usuario.'"><i class="bi bi-pencil-square"></i></a></td>
-                  <td><a class="btn btn-danger" href="./excluir_usuario.php?id_user='.$usuario->id_usuario.'"><i class="bi bi-trash3"></i></a></td>
+                  <th scope="row">'.$produto->id_produto.'</th>
+                  <td ><img src='.$produto->foto.' style="width: 100px;"></td>
+                  <td>'.$produto->nome.'</td>
+                  <td>'.$produto->descricao.'</td>
+                  <td><a class="btn btn-primary" href="./editar_produto.php?id_prod='.$produto->id_produto.'"><i class="bi bi-pencil-square"></i></a></td>
+                  <td><a class="btn btn-danger" href="./excluir_produto.php?id_prod='.$produto->id_produto.'"><i class="bi bi-trash3"></i></a></td>
 
                 </tr>
                 ';

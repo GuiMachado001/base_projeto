@@ -1,31 +1,29 @@
 <?php
 
-require './App/Classes/Usuario.php';
+require './App/Classes/Produto.php';
 
-if(isset($_GET['id_user'])){
+if(isset($_GET['id_prod'])){
 
-  $id = $_GET['id_user'];
+  $id = $_GET['id_prod'];
 
-  $objUser = new Usuario;
+  $objUser = new Produto();
 
-  $user_edit = $objUser->buscar_por_id($id);
+  $prod_edit = $objUser->buscar_por_id($id);
 
 
   // ---atualiza
   if(isset($_POST['editar'])){
 
     $nome = $_POST['nome'];
-    $cpf = $_POST['cpf'];
-    $senha = $_POST['senha'];
-    $email = $_POST['email'];
-    $perfil = $_POST['perfil'];
+    $descricao = $_POST['descricao'];
+    $preco = $_POST['preco'];
 
 
     // ----------- manipulando arquivos com php
     // print_r($_FILES);
     $arquivo = $_FILES['foto'];
     if($arquivo['error']) die ("Falha ao enviar a foto");
-    $pasta = './uploads/fotos/';
+    $pasta = './uploads/fotos_produtos/';
     $nome_foto = $arquivo['name'];
     $novo_nome = uniqid();
     $extensao = strtolower(pathinfo($nome_foto, PATHINFO_EXTENSION));
@@ -36,18 +34,16 @@ if(isset($_GET['id_user'])){
 
 
 
-    $user_edit->nome = $nome;
-    $user_edit->cpf = $cpf;
-    $user_edit->senha = password_hash($senha, PASSWORD_DEFAULT);
-    $user_edit->email = $email;
-    $user_edit->foto = $path;
-    $user_edit->id_perfil = $perfil;
+    $prod_edit->nome = $nome;
+    $prod_edit->descricao = $descricao;
+    $prod_edit->foto = $path;
+    $prod_edit->preco = $preco;
 
-    $res = $user_edit->atualizar();
+    $res = $prod_edit->atualizar();
 
     if($res){
       echo "<script>alert('Editado com Sucesso') </script>";
-      header('location: ./listar.php');
+      header('location: ./listar_produtos.php');
     }else{
       echo "<script>alert('Erro ao Cadastrar') </script>";
     }
@@ -98,15 +94,15 @@ if(isset($_GET['id_user'])){
         <h1>SysCad</h1>
     </div>
     <div class="container">
-        <h1 class="mt-4 text-center">Editar Usuario</h1>
+        <h1 class="mt-4 text-center">Editar Produto</h1>
     </div>
     
     <div class="container">
         <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-              <label for="nome" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $user_edit->nome;?>">
+              <label for="nome" class="form-label">Nome Produto</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nome" value="<?php echo $prod_edit->nome;?>">
             </div>
 
             <div class="mb-3">
@@ -115,32 +111,17 @@ if(isset($_GET['id_user'])){
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">email</label>
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo $user_edit->email;?>">
+                <label for="descricao" class="form-label">descricao</label>
+                <input type="text" class="form-control" id="descricao" name="descricao"  value="<?php echo $prod_edit->descricao;?>">
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
 
               
             <div class="mb-3">
-                <label for="cpf" class="form-label">cpf</label>
-                <input type="cpf" class="form-control" id="cpf" name="cpf" value="<?php echo $user_edit->cpf;?>">
+                <label for="preco" class="form-label">preco</label>
+                <input type="number" class="form-control" id="preco" name="preco" value="<?php echo $prod_edit->preco;?>">
             </div>
 
-              
-            <div class="mb-3">
-                <label for="senha" class="form-label">senha</label>
-                <input type="password" class="form-control" id="senha" name="senha" value="<?php echo $user_edit->senha;?>">
-            </div>
-
-            <div class="mb-3">
-              <select class="form-select" name="perfil" aria-label="Default select example">
-                <option selected><?php echo $user_edit->id_perfil;?></option>
-                <option value="1">ADM</option>
-                <option value="2">Supervisor</option>
-                <option value="3">Usuario</option>
-              </select>
-            </div>
-                
 
             <button type="reset" class="btn btn-danger">Cancelar</button>
             <button type="submit" name="editar" class="btn btn-primary">Salvar</button>

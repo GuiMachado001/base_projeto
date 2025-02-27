@@ -20,7 +20,7 @@
     $nome_foto = $arquivo['name'];
     $novo_nome = uniqid();
     $extensao = strtolower(pathinfo($nome_foto, PATHINFO_EXTENSION));
-    if($extensao != 'png' && $extensao != 'jpg' && $extensao != 'jpeg') die ("Arquivo Inválido!");
+    if($extensao != 'png' && $extensao != 'jpg' && $extensao != 'jpeg' && $extensao != 'svg'  ) die ("Arquivo Inválido!");
     $path = $pasta . $novo_nome . '.'. $extensao;
     $foto = move_uploaded_file($arquivo['tmp_name'], $path);
 
@@ -65,7 +65,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-primary">
+<nav class="navbar navbar-expand-lg bg-primary">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Navbar</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,19 +79,11 @@
               <li class="nav-item">
                 <a class="nav-link" href="listar.php">Listar</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
+              <li class="nav-item">
+                <a class="nav-link" href="cadastrar_produto.php">Cadastrar Produto</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                <a class="nav-link" href="listar_produtos.php">Listar Produtos</a>
               </li>
             </ul>
           </div>
